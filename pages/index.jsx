@@ -64,41 +64,37 @@ const Home = () => {
       </div>
 
       {/* images */}
-      <div className="absolute right-0 bottom-0 w-full xl:w-[1280px] h-full">
+<div className="w-full h-full absolute right-0 bottom-0 lg:w-[1280px]">
 
-        {/* background image */}
-        <div
-          className="bg-none xl:bg-explosion xl:bg-cover xl:bg-right xl:bg-no-repeat
-          w-full h-full absolute mix-blend-color-dodge"
-        />
+  <div
+    role="img"
+    className="bg-none xl:bg-explosion xl:bg-cover xl:bg-right xl:bg-no-repeat 
+    w-full h-full absolute mix-blend-color-dodge translate-z-0"
+    aria-hidden
+  />
 
-        {/* particles */}
-        <ParticlesContainer />
+  <ParticlesContainer />
 
-        {/* avatar – only mobile changes */}
-       <motion.div
-  variants={fadeIn("up", 0.5)}
-  initial="hidden"
-  animate="show"
-  exit="hidden"
-  transition={{ duration: 1, ease: "easeInOut" }}
-  className="
-    absolute bottom-0
+  <motion.div
+    variants={fadeIn("up", 0.5)}
+    initial="hidden"
+    animate="show"
+    exit="hidden"
+    transition={{ duration: 1, ease: "easeInOut" }}
+    className="
+      absolute bottom-0
+      left-1/2 -translate-x-1/2
+      w-[260px] sm:w-[320px] md:w-[380px]
 
-    /* MOBILE & TABLET */
-    left-1/2 -translate-x-1/2
-    w-[260px] sm:w-[320px] md:w-[380px]
+      lg:translate-x-0 lg:left-auto lg:right-[8%]
+      lg:w-[650px] lg:h-auto
+    "
+  >
+    <Avatar />
+  </motion.div>
 
-    /* DESKTOP FIX (restores original position) */
-    xl:left-auto xl:translate-x-0 xl:right-[8%]
-    xl:w-[650px] xl:h-auto
-  "
->
-  <Avatar />
-</motion.div>
+</div>
 
-
-      </div>
     </div>
   );
 };
