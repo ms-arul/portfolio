@@ -51,9 +51,10 @@ const Contact = () => {
   return (
     <div
       id="contact"
-      className="min-h-screen bg-primary/30 px-4 pt-24 pb-10 flex justify-center items-start sm:items-center"
+      className="min-h-screen w-full bg-primary/30 px-4 pt-24 pb-10 flex justify-center items-start sm:items-center overflow-y-auto"
     >
-      <div className="w-full max-w-[700px]">
+      <div className="w-full max-w-[700px] flex-shrink-0">
+
         {/* Heading */}
         <motion.h2
           variants={fadeIn("up", 0.2)}
