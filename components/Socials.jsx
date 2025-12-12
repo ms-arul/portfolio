@@ -6,6 +6,7 @@ import {
   RiFacebookLine,
   RiDribbbleLine,
   RiGithubLine,
+  RiMailLine,
   RiWhatsappLine,
   RiLinkedinLine,
   RiPinterestLine,
@@ -18,6 +19,11 @@ export const socialData = [
     link: "https://www.instagram.com/ms_arul_?igsh=MXc4cTc4Z3UyMmZxeQ==",
     Icon: RiInstagramLine,
   },
+{
+  name: "Email",
+  link: "mailto:msarul7686@gmail.com",
+  Icon: RiMailLine,
+},
 
   {
     name: "LinkedIn",
