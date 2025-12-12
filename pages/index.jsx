@@ -41,7 +41,7 @@ const Home = () => {
           <div className="bg-white dark:bg-gray-900 rounded-lg p-6 max-w-sm text-center shadow-lg">
             <h2 className="text-xl font-bold mb-4">Switch to Desktop Version?</h2>
             <p className="mb-6">
-              This site is optimized for desktop. Do you want to switch?
+              This site is optimized for desktop, please switch to it.
             </p>
             <div className="flex justify-center gap-4">
               <button
@@ -92,7 +92,7 @@ const Home = () => {
             className="max-w-md mx-auto xl:max-w-xl xl:mx-0 mb-10 xl:mb-16 text-sm sm:text-base md:text-lg"
           >
             I’m Arul Prakash, a student at St. Joseph’s College of Engineering,
-            with a strong CGPA of 8.39, skilled in Full Stack Development,
+            with a CGPA of 8.39, skilled in Full Stack Development,
             UI/UX Design, Logo Designing, and Data Analysis. I’m passionate about
             creating intuitive digital solutions and continuously exploring new
             technologies to grow as a developer and designer.
