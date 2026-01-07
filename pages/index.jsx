@@ -91,7 +91,7 @@ const Home = () => {
             exit="hidden"
             className="max-w-md mx-auto xl:max-w-xl xl:mx-0 mb-10 xl:mb-16 text-sm sm:text-base md:text-lg"
           >
-            I’m Arul, a student at St. Joseph’s College of Engineering,
+            I’m Arul Prakash, a student at St. Joseph’s College of Engineering,
             with a CGPA of 8.39, skilled in Full Stack Development,
             UI/UX Design, Logo Designing, and Data Analysis. I’m passionate about
             creating intuitive digital solutions and continuously exploring new
