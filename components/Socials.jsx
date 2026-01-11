@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import { HiOutlineDownload } from "react-icons/hi";
 import {
   RiYoutubeLine,
   RiInstagramLine,
@@ -43,6 +43,30 @@ export const socialData = [
     Icon: RiGithubLine,
   },
 ];
+
+const socialLinks = [
+  {
+    name: "Download CV",
+    link: "/ARULPRAKASH_RESUME.pdf",
+    Icon: HiOutlineDownload,
+    download: true,
+  },
+];
+
+{socialLinks.map((item, index) => (
+  <a
+    key={index}
+    href={item.link}
+    download={item.download}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition"
+  >
+    <item.Icon size={20} />
+    <span>{item.name}</span>
+  </a>
+))}
+
 
 const Socials = () => {
   return (
