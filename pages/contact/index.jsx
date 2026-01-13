@@ -7,33 +7,54 @@ import { RiMailLine } from "react-icons/ri";
 const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const email = "msarul7686@gmail.com";
 
+  // Copy email to clipboard
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(email);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
 
-  const handleSubmit = (event) => {
+  // Handle form submission
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
 
-    const myForm = event.target;
-    const formData = new FormData(myForm);
+    const formData = {
+      name: event.target.name.value,
+      email: event.target.email.value,
+      subject: event.target.subject.value,
+      message: event.target.message.value,
+    };
 
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(formData).toString(),
-    })
-      .then(() => alert("Thank you. I will get back to you ASAP."))
-      .catch((error) => console.log(error))
-      .finally(() => setIsLoading(false));
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setSuccess(true);
+        event.target.reset(); // clear form
+        setTimeout(() => setSuccess(false), 4000); // hide success after 4s
+      } else {
+        alert("Something went wrong. Try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Server error. Try again later.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Smooth scroll behavior for internal links
+  // Smooth scroll for internal links
   useEffect(() => {
     const handleSmoothScroll = (e) => {
       if (e.target.tagName === "A" && e.target.hash) {
@@ -45,7 +66,8 @@ const Contact = () => {
       }
     };
     document.addEventListener("click", handleSmoothScroll);
-    return () => document.removeEventListener("click", handleSmoothScroll);
+    return () =>
+      document.removeEventListener("click", handleSmoothScroll);
   }, []);
 
   return (
@@ -66,7 +88,7 @@ const Contact = () => {
           Let's <span className="text-accent">connect.</span>
         </motion.h2>
 
-        {/* Email clickable */}
+        {/* Clickable Email */}
         <motion.p
           variants={fadeIn("up", 0.3)}
           initial="hidden"
@@ -95,7 +117,20 @@ const Contact = () => {
           </motion.p>
         )}
 
-        {/* Form */}
+        {/* Success message */}
+        {success && (
+          <motion.p
+            variants={fadeIn("up", 0.1)}
+            initial="hidden"
+            animate="show"
+            exit="hidden"
+            className="text-green-400 text-center mb-4 font-semibold"
+          >
+            ✔ Message sent successfully!
+          </motion.p>
+        )}
+
+        {/* Contact Form */}
         <motion.form
           variants={fadeIn("up", 0.4)}
           initial="hidden"
@@ -104,7 +139,6 @@ const Contact = () => {
           className="bg-white/5 backdrop-blur-xl p-6 rounded-2xl shadow-xl border border-white/10 flex flex-col gap-5 transition-all duration-300 hover:scale-[1.02]"
           onSubmit={handleSubmit}
           autoComplete="off"
-          data-netlify="true"
         >
           {/* Name + Email */}
           <div className="flex flex-col sm:flex-row gap-5 w-full">
@@ -126,6 +160,7 @@ const Contact = () => {
             />
           </div>
 
+          {/* Subject */}
           <input
             type="text"
             name="subject"
@@ -135,6 +170,7 @@ const Contact = () => {
             required
           />
 
+          {/* Message */}
           <textarea
             name="message"
             placeholder="Message..."
