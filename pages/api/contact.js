@@ -1,43 +1,70 @@
 import nodemailer from "nodemailer";
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
+// ✅ Reuse transporter between invocations (important for Vercel)
+let transporter;
 
-  const { name, email, subject, message } = req.body;
-
-  try {
-    // Create transporter
-    const transporter = nodemailer.createTransport({
+function getTransporter() {
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST, // smtp.gmail.com
       port: 465,
       secure: true,
       auth: {
         user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS, // Gmail app password
+        pass: process.env.SMTP_PASS, // App password
       },
     });
+  }
+  return transporter;
+}
 
-    // Prepare email
+export default async function handler(req, res) {
+  // ✅ Allow only POST
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
+  }
+
+  const { name, email, subject, message } = req.body || {};
+
+  // ✅ Fast validation (prevents wasted cold-start work)
+  if (
+    !name ||
+    !email ||
+    !subject ||
+    !message ||
+    typeof email !== "string"
+  ) {
+    return res.status(400).json({ message: "Invalid request data" });
+  }
+
+  try {
+    const transporter = getTransporter();
+
     const mailOptions = {
       from: `"Portfolio Contact" <${process.env.SMTP_USER}>`,
-      to: process.env.SMTP_USER, // receive messages
-      subject: `New Contact: ${subject}`,
+      to: "msarul7686@gmail.com", // ✅ fixed receiver
+      replyTo: email,
+      subject: `📩 ${subject}`,
       html: `
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
+        <div style="font-family: system-ui, Arial; padding: 10px">
+          <h3>New Contact Form Message</h3>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <hr />
+          <p>${message.replace(/\n/g, "<br />")}</p>
+        </div>
       `,
     };
 
-    // Send email
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({ success: true });
+    return res.status(200).json({ success: true });
   } catch (error) {
-    console.error("Error sending email:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Mail error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Email service unavailable",
+    });
   }
 }
