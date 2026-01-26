@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { BsArrowRight } from "react-icons/bs";
 import { useState } from "react";
-
 import { fadeIn } from "../../variants";
 
 const Contact = () => {
@@ -14,16 +13,26 @@ const Contact = () => {
     setStatus({ type: "", message: "" });
 
     const form = event.target;
-    const formData = new FormData(form);
+
+    const payload = {
+      name: form.name.value,
+      email: form.email.value,
+      subject: form.subject.value,
+      message: form.message.value,
+    };
 
     try {
-      const response = await fetch("/", {
+      const response = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData).toString(),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error("Submission failed");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.message || "Submission failed");
+      }
 
       setStatus({
         type: "success",
@@ -34,7 +43,7 @@ const Contact = () => {
     } catch (error) {
       setStatus({
         type: "error",
-        message: "Something went wrong. Please try again later ❌",
+        message: error.message || "Something went wrong. Please try again ❌",
       });
     } finally {
       setIsLoading(false);
@@ -45,7 +54,6 @@ const Contact = () => {
     <div className="h-full bg-primary/30">
       <div className="container mx-auto py-32 flex items-center justify-center h-full">
         <div className="flex flex-col w-full max-w-[700px] text-center xl:text-left">
-          
           {/* Heading */}
           <motion.h2
             variants={fadeIn("up", 0.2)}
@@ -65,14 +73,8 @@ const Contact = () => {
             exit="hidden"
             onSubmit={handleSubmit}
             autoComplete="off"
-            data-netlify="true"
-            name="contact"
             className="flex flex-col gap-6"
           >
-            {/* Netlify */}
-            <input type="hidden" name="form-name" value="contact" />
-            <input type="hidden" name="bot-field" />
-
             {/* Inputs */}
             <div className="flex flex-col md:flex-row gap-6">
               <input
@@ -129,7 +131,7 @@ const Contact = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="btn rounded-full border border-white/50 max-w-[180px] px-8 self-center xl:self-start
+              className="btn relative rounded-full border border-white/50 max-w-[180px] px-8 self-center xl:self-start
                 flex items-center justify-center gap-2 overflow-hidden transition-all duration-300
                 hover:border-accent disabled:opacity-60 disabled:cursor-not-allowed group"
             >
