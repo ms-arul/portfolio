@@ -19,8 +19,8 @@ const workSlides = {
         },
         {
           title: "title",
-          path: "/thumb2.jpg",
-          link: "http://example.com",
+          path: "/thumb2.jpeg",
+          link: "https://astranova26.vercel.app/",
         },
         {
           title: "title",
